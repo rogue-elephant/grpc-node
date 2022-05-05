@@ -1,0 +1,33 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true
+  },
+  "extensions": {
+    "recommendations": ["zxh404.vscode-proto3"]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Generate protos on save",
+        "command": "npm run protos:generate",
+        "type": "shell"
+      },
+      {
+        "label": "Hot reload server",
+        "command": "npm run start:server",
+        "type": "shell"
+      },
+      {
+        "label": "Hot reload client",
+        "command": "npm run start:client",
+        "type": "shell"
+      }
+    ]
+  }
+}
