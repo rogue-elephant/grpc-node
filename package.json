@@ -1,5 +1,5 @@
 {
-  "name": "grpc-node-course",
+  "name": "grpc-node",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "start:client": "nodemon -e .js --exec npm run delayClientStart",
     "protos:generate": "nodemon -e .proto --exec npx grpc_tools_node_protoc ./protos/*.proto* --js_out=import_style=commonjs,binary:./server --grpc_out=./server"
   },
-  "author": "",
+  "author": "Tom Randell",
   "license": "ISC",
   "dependencies": {
     "google-protobuf": "^3.13.0",
