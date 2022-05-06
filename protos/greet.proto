@@ -8,6 +8,12 @@ service GreetService {
 
     // streaming API
     rpc GreetManyTimes (GreetManyTimesRequest) returns (stream GreetManyTimesResponse) {};
+
+    // client streaming
+    rpc LongGreet (stream LongGreetRequest) returns (LongGreetResponse) {};
+
+    // bi-directional streaming
+    rpc GreetEveryone (stream GreetEveryoneRequest) returns (stream GreetEveryoneResponse);
 }
 
 message Greeting {
@@ -28,5 +34,21 @@ message GreetManyTimesRequest {
 }
 
 message GreetManyTimesResponse {
+    string result = 1;
+}
+
+message LongGreetRequest {
+    Greeting greeting = 1;
+}
+
+message LongGreetResponse {
+    string result = 1;
+}
+
+message GreetEveryoneRequest {
+    Greeting greeting = 1;
+}
+
+message GreetEveryoneResponse {
     string result = 1;
 }

@@ -113,10 +113,186 @@ function callNthFibonacciService() {
   });
 }
 
+function callLongGreeting() {
+  var client = new greetService.GreetServiceClient(
+    globals.serverUrl,
+    grpc.credentials.createInsecure()
+  );
+
+  var request = new greets.LongGreetRequest();
+
+  var call = client.longGreet(request, (error, response) => {
+    if (!error) {
+      console.log("Server Response:", response.getResult());
+    } else console.error(error);
+  });
+
+  let count = 0,
+    timer = setInterval(() => {
+      var request = new greets.LongGreetRequest();
+      var greeting = new greets.Greeting();
+      greeting.setFirstName("Johnny");
+      greeting.setLastName("No. " + count);
+      request.setGreeting(greeting);
+
+      console.log(
+        "Sending message",
+        ++count,
+        greeting.getFirstName(),
+        greeting.getLastName()
+      );
+
+      call.write(request);
+
+      if (count > 5) {
+        clearInterval(timer);
+        call.end();
+      }
+    }, 1000);
+}
+
+function callComputeAverage() {
+  var client = new calculatorService.CalculatorServiceClient(
+    globals.serverUrl,
+    grpc.credentials.createInsecure()
+  );
+
+  var request = new calculator.ComputeAverageRequest();
+
+  var call = client.computeAverage(request, (error, response) => {
+    if (!error) {
+      console.log(
+        "Server Response, avg:",
+        response.getAverage(),
+        ". Total no. values:",
+        response.getNumberOfValues(),
+        ". Values:",
+        response.getValuesList()
+      );
+    } else console.error(error);
+  });
+
+  let count = 0,
+    timer = setInterval(() => {
+      var request = new calculator.ComputeAverageRequest();
+      request.setValue(count * 3);
+
+      console.log("Sending message", ++count, request.getValue());
+
+      call.write(request);
+
+      if (count > 5) {
+        clearInterval(timer);
+        call.end();
+      }
+    }, 1000);
+}
+
+async function sleep(interval = 1000) {
+  return new Promise((resolve) => setTimeout(() => resolve(), interval));
+}
+
+async function callGreetEveryone() {
+  var client = new greetService.GreetServiceClient(
+    globals.serverUrl,
+    grpc.credentials.createInsecure()
+  );
+
+  var call = client.greetEveryone(request, (error, response) => {});
+
+  call.on("data", (response) => {
+    console.log("Response:", response.getResult());
+  });
+
+  call.on("error", (error) => console.error);
+
+  call.on("end", () => console.log("end of stream"));
+
+  for (let index = 0; index < 10; index++) {
+    var greeting = new greets.Greeting();
+    greeting.setFirstName("Johan");
+    greeting.setLastName("No." + index);
+
+    var request = new greets.GreetEveryoneRequest();
+    request.setGreeting(greeting);
+
+    call.write(request);
+
+    await sleep();
+  }
+
+  call.end();
+}
+
+async function callFindMaximum() {
+  var client = new calculatorService.CalculatorServiceClient(
+    globals.serverUrl,
+    grpc.credentials.createInsecure()
+  );
+
+  var call = client.findMaximum(request, (error, response) => {});
+
+  call.on("data", (response) => {
+    console.log(
+      "Response => maximum:",
+      response.getMaximum(),
+      ". Number of values:",
+      response.getNumberOfValues(),
+      ". Values:",
+      response.getValuesList()
+    );
+  });
+
+  call.on("error", (error) => console.error);
+
+  call.on("end", () => console.log("end of stream"));
+
+  for (let index = 0; index < 10; index++) {
+    var request = new calculator.FindMaximumRequest();
+    request.setValue(index * Math.floor(Math.random() * 5));
+
+    console.log("Sending value:", request.getValue());
+    call.write(request);
+
+    await sleep();
+  }
+
+  call.end();
+}
+
+function callSquareRoot() {
+  var client = new calculatorService.CalculatorServiceClient(
+    globals.serverUrl,
+    grpc.credentials.createInsecure()
+  );
+
+  var number = -1;
+  var squareRootRequest = new calculator.SquareRootRequest();
+  squareRootRequest.setNumber(number);
+
+  client.squareRoot(squareRootRequest, (error, response) => {
+    if (!error) {
+      console.log(
+        "Response => square root for " +
+          number +
+          " is " +
+          response.getNumberRoot()
+      );
+    } else {
+      console.error(error.message);
+    }
+  });
+}
+
 function main() {
   //   callGreetService();
   //   callCalculatorService();
   //   callGreetManyTimesService();
-  callNthFibonacciService();
+  // callNthFibonacciService();
+  // callLongGreeting();
+  // callComputeAverage();
+  // callGreetEveryone();
+  // callFindMaximum();
+  callSquareRoot();
 }
 main();

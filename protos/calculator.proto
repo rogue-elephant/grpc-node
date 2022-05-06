@@ -3,8 +3,21 @@ syntax = "proto3";
 package calculator;
 
 service CalculatorService {
+    // unary API
     rpc Sum (SumRequest) returns (SumResponse);
+
+    // streaming API
     rpc NthFibonacci (NthFibonacciRequest) returns (stream NthFibonacciResponse);
+
+    // client streaming
+    rpc ComputeAverage (stream ComputeAverageRequest) returns (ComputeAverageResponse);
+
+    // bi-directional streaming
+    rpc FindMaximum (stream FindMaximumRequest) returns (stream FindMaximumResponse);
+
+    // error handling
+    // throws when number sent is negative
+    rpc SquareRoot (SquareRootRequest) returns (SquareRootResponse);
 }
 
 message SumRequest {
@@ -23,4 +36,29 @@ message NthFibonacciRequest {
 message NthFibonacciResponse {
     int32 index = 1;
     int32 result = 2;
+}
+
+message ComputeAverageRequest {
+    int32 value = 1;
+}
+message ComputeAverageResponse {
+    double average = 1;
+    int32 number_of_values = 2;
+    repeated int32 values = 3 [packed=true];
+}
+
+message FindMaximumRequest {
+    int32 value = 1;
+}
+message FindMaximumResponse {
+    int32 maximum = 1;
+    int32 number_of_values = 2;
+    repeated int32 values = 3 [packed=true];
+}
+
+message SquareRootRequest {
+    int32 number = 1;
+}
+message SquareRootResponse {
+    double number_root = 1;
 }

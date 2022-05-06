@@ -4,6 +4,50 @@
 var grpc = require('grpc');
 var protos_calculator_pb = require('../protos/calculator_pb.js');
 
+function serialize_calculator_ComputeAverageRequest(arg) {
+  if (!(arg instanceof protos_calculator_pb.ComputeAverageRequest)) {
+    throw new Error('Expected argument of type calculator.ComputeAverageRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_ComputeAverageRequest(buffer_arg) {
+  return protos_calculator_pb.ComputeAverageRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_calculator_ComputeAverageResponse(arg) {
+  if (!(arg instanceof protos_calculator_pb.ComputeAverageResponse)) {
+    throw new Error('Expected argument of type calculator.ComputeAverageResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_ComputeAverageResponse(buffer_arg) {
+  return protos_calculator_pb.ComputeAverageResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_calculator_FindMaximumRequest(arg) {
+  if (!(arg instanceof protos_calculator_pb.FindMaximumRequest)) {
+    throw new Error('Expected argument of type calculator.FindMaximumRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_FindMaximumRequest(buffer_arg) {
+  return protos_calculator_pb.FindMaximumRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_calculator_FindMaximumResponse(arg) {
+  if (!(arg instanceof protos_calculator_pb.FindMaximumResponse)) {
+    throw new Error('Expected argument of type calculator.FindMaximumResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_FindMaximumResponse(buffer_arg) {
+  return protos_calculator_pb.FindMaximumResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_calculator_NthFibonacciRequest(arg) {
   if (!(arg instanceof protos_calculator_pb.NthFibonacciRequest)) {
     throw new Error('Expected argument of type calculator.NthFibonacciRequest');
@@ -24,6 +68,28 @@ function serialize_calculator_NthFibonacciResponse(arg) {
 
 function deserialize_calculator_NthFibonacciResponse(buffer_arg) {
   return protos_calculator_pb.NthFibonacciResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_calculator_SquareRootRequest(arg) {
+  if (!(arg instanceof protos_calculator_pb.SquareRootRequest)) {
+    throw new Error('Expected argument of type calculator.SquareRootRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_SquareRootRequest(buffer_arg) {
+  return protos_calculator_pb.SquareRootRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_calculator_SquareRootResponse(arg) {
+  if (!(arg instanceof protos_calculator_pb.SquareRootResponse)) {
+    throw new Error('Expected argument of type calculator.SquareRootResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_calculator_SquareRootResponse(buffer_arg) {
+  return protos_calculator_pb.SquareRootResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_calculator_SumRequest(arg) {
@@ -50,7 +116,8 @@ function deserialize_calculator_SumResponse(buffer_arg) {
 
 
 var CalculatorServiceService = exports.CalculatorServiceService = {
-  sum: {
+  // unary API
+sum: {
     path: '/calculator.CalculatorService/Sum',
     requestStream: false,
     responseStream: false,
@@ -61,7 +128,8 @@ var CalculatorServiceService = exports.CalculatorServiceService = {
     responseSerialize: serialize_calculator_SumResponse,
     responseDeserialize: deserialize_calculator_SumResponse,
   },
-  nthFibonacci: {
+  // streaming API
+nthFibonacci: {
     path: '/calculator.CalculatorService/NthFibonacci',
     requestStream: false,
     responseStream: true,
@@ -71,6 +139,43 @@ var CalculatorServiceService = exports.CalculatorServiceService = {
     requestDeserialize: deserialize_calculator_NthFibonacciRequest,
     responseSerialize: serialize_calculator_NthFibonacciResponse,
     responseDeserialize: deserialize_calculator_NthFibonacciResponse,
+  },
+  // client streaming
+computeAverage: {
+    path: '/calculator.CalculatorService/ComputeAverage',
+    requestStream: true,
+    responseStream: false,
+    requestType: protos_calculator_pb.ComputeAverageRequest,
+    responseType: protos_calculator_pb.ComputeAverageResponse,
+    requestSerialize: serialize_calculator_ComputeAverageRequest,
+    requestDeserialize: deserialize_calculator_ComputeAverageRequest,
+    responseSerialize: serialize_calculator_ComputeAverageResponse,
+    responseDeserialize: deserialize_calculator_ComputeAverageResponse,
+  },
+  // bi-directional streaming
+findMaximum: {
+    path: '/calculator.CalculatorService/FindMaximum',
+    requestStream: true,
+    responseStream: true,
+    requestType: protos_calculator_pb.FindMaximumRequest,
+    responseType: protos_calculator_pb.FindMaximumResponse,
+    requestSerialize: serialize_calculator_FindMaximumRequest,
+    requestDeserialize: deserialize_calculator_FindMaximumRequest,
+    responseSerialize: serialize_calculator_FindMaximumResponse,
+    responseDeserialize: deserialize_calculator_FindMaximumResponse,
+  },
+  // error handling
+// throws when number sent is negative
+squareRoot: {
+    path: '/calculator.CalculatorService/SquareRoot',
+    requestStream: false,
+    responseStream: false,
+    requestType: protos_calculator_pb.SquareRootRequest,
+    responseType: protos_calculator_pb.SquareRootResponse,
+    requestSerialize: serialize_calculator_SquareRootRequest,
+    requestDeserialize: deserialize_calculator_SquareRootRequest,
+    responseSerialize: serialize_calculator_SquareRootResponse,
+    responseDeserialize: deserialize_calculator_SquareRootResponse,
   },
 };
 
